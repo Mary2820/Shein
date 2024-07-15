@@ -6,10 +6,10 @@ import org.testng.annotations.BeforeTest;
 
 public class BaseTest {
 
-    @AfterTest
-    public void teardown() {
-        DriverInitializer.getDriver().quit();
-    }
+//    @AfterTest
+//    public void teardown() {
+//        DriverInitializer.getDriver().quit();
+//    }
 
     @BeforeTest
     public void startDriver () {

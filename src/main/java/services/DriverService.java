@@ -20,5 +20,10 @@ public class DriverService {
     public static void waitElement(WebElement webElement) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.visibilityOfAllElements(webElement));
-        }
+    }
+
+    public static void openSite(String url) {
+        driver.get(url);
+    }
+
 }
