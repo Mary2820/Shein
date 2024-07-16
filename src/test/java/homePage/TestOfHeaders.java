@@ -3,14 +3,16 @@ package homePage;
 import base.BaseTest;
 import constants.Configuration;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import pages.homepage.HomePage;
+import pages.CatalogPage;
+import pages.HomePage;
 
 public class TestOfHeaders extends BaseTest {
     HomePage homePage;
 
-    @BeforeTest
+    @BeforeMethod
     public void setUp() {
         homePage = new HomePage();
         homePage.openSite(Configuration.URL);
@@ -29,13 +31,27 @@ public class TestOfHeaders extends BaseTest {
     }
 
     @Test
-    public void clickLogo() {
-        Assert.assertTrue(homePage.header.logo.clickLogo());
+    public void whenClickLogoHomePageOpens() {
+        whenClickSearchAndEnterRequestCatalogPageIsOpened();
+
+        homePage.header.logo.clickLogo();
+
+        Assert.assertTrue(homePage.homePageIsOpened());
     }
 
     @Test
-    public void search() {
+    public void whenClickSearchAndEnterRequestCatalogPageIsOpened() {
+        CatalogPage catalogPage = new CatalogPage();
+
         homePage.header.search.searchFor("dress");
+        Assert.assertTrue(catalogPage.topInfoIsDisplayed());
+    }
+
+    @Test
+    public void whenClickCancelButtonOfSearchFieldSearchFieldIsCleared() {
+        homePage.header.search.cancelSearchFor("dress");
+
+        Assert.assertTrue(homePage.header.search.searchForEmpty());
     }
 
 }
