@@ -7,7 +7,7 @@ import services.DriverService;
 public class HomePage extends BasePage {
     public Header header;
 
-    @FindBy(id = "onetrust-accept-btn-handler")
+    @FindBy(xpath = "//*[@id='onetrust-accept-btn-handler']")
     public WebElement acceptCookiesButton;
 
     @FindBy(xpath = "//div[@class = 'sui-dialog__body']//span[contains(@class,'sui-icon-common__wrap')]")
