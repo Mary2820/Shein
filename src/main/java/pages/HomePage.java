@@ -24,8 +24,13 @@ public class HomePage extends BasePage {
     }
 
     public void acceptCookies() {
-        DriverService.waitElement(acceptCookiesButton);
-        acceptCookiesButton.click();
+        try {
+            DriverService.waitElement(acceptCookiesButton);
+        } catch (Exception ignored) {;
+        }
+        if (acceptCookiesButton.isDisplayed()) {
+            acceptCookiesButton.click();
+        }
     }
 
     public void closePopUpWithAdvertising () {
