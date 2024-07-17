@@ -1,8 +1,12 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import services.DriverService;
+
+import java.util.List;
 
 public class HomePage extends BasePage {
     public Header header;
@@ -102,30 +106,81 @@ public class HomePage extends BasePage {
             @FindBy(xpath = "//div[@class='cancel-wrap']/span")
             public WebElement cancelButton;
 
+            @FindBy(xpath = "//div[@class = 'search-content' ]")
+            public WebElement searchContentList;
+
+            @FindBy(xpath = "//div[@class = 'hot-words-title' ]")
+            public WebElement hotWordsTitle;
+
+            @FindBy(xpath = "//div[contains(@class, 'hotwords-item')]")
+            public WebElement hotWordsItemsList;
+
+            @FindBy(xpath = "//div[@class = 'association-words']")
+            public WebElement listOfAssociationWords;
+
             public Search() {
                 DriverService.initPageElements(this);
             }
 
-            public void searchFor(String text) {
+            public void clickSearchField() {
                 DriverService.waitElement(searchField);
                 searchField.click();
+            }
+
+            public void enterTextToSearchField(String text) {
                 DriverService.waitElement(searchInput);
                 searchInput.sendKeys(text);
+            }
+
+            public void clickSearchButton() {
+                DriverService.waitElement(searchButton);
                 searchButton.click();
             }
 
-            public void cancelSearchFor(String text) {
-                DriverService.waitElement(searchField);
-                searchField.click();
+            public void submitSearch() {
                 DriverService.waitElement(searchInput);
-                searchInput.sendKeys(text);
+                searchInput.submit();
+            }
+
+            public void clickCancelButton() {
                 DriverService.waitElement(cancelButton);
                 cancelButton.click();
             }
 
-            public boolean searchForEmpty() {
+            public boolean searchFieldIsEmpty() {
                 String value = searchInput.getAttribute("value");
                 return value.isEmpty();
+            }
+
+            public boolean searchContentListIsDisplayed() {
+                return searchContentList.isDisplayed();
+            }
+
+            public boolean hotWordsTitleIsDisplayed() {
+                return hotWordsTitle.isDisplayed();
+            }
+
+            public boolean hotWordsItemsListIsDisplayed() {
+                return hotWordsItemsList.isDisplayed();
+            }
+
+            public boolean listOfAssociationWordsIsDisplayed() {
+                return listOfAssociationWords.isDisplayed();
+            }
+
+            public boolean associationWordsContainEnteredText(String enteredText) {
+                List<WebElement> elements = driver.findElements(By.className("match-text"));
+
+                if (elements.isEmpty()) {
+                    return false;
+                }
+
+                for (WebElement element : elements) {
+                    if (!element.getText().contains(enteredText)) {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     }
