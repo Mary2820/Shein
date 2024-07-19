@@ -5,9 +5,11 @@ import constants.Configuration;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.CatalogPage;
 import pages.HomePage;
+import pages.LoginPage;
 
 public class TestOfHeaders extends BaseTest {
     HomePage homePage;
@@ -19,6 +21,7 @@ public class TestOfHeaders extends BaseTest {
         homePage.openSite(Configuration.URL);
         homePage.acceptCookies();
         homePage.closePopUpWithAdvertising();
+        homePage.closeQuickViewAd();
     }
 
     @Feature("Logo")
@@ -95,6 +98,49 @@ public class TestOfHeaders extends BaseTest {
 
         Assert.assertTrue(homePage.header.search.listOfAssociationWordsIsDisplayed());
         Assert.assertTrue(homePage.header.search.associationWordsContainEnteredText("Pink Jeans"));
+    }
+
+    @Feature("Profile menu")
+    @Test
+    public void whenHoverOverProfileMenuIconToDisplayUserDropDown() {
+        homePage.header.profileMenu.profileMenuIsDisplayed();
+
+        homePage.header.profileMenu.hoverOverProfileMenuIcon();
+
+        Assert.assertTrue(homePage.header.profileMenu.userDropdownIsDisplayed());
+    }
+
+    @DataProvider(name = "userDropdownItems")
+    public Object[][] userDropdownItems() {
+        return new Object[][]{
+                {"1", "Sign In / Register"},
+                {"2", "My Orders"},
+                {"3", "My Message"},
+                {"4", "My Coupons"},
+                {"5", "My Points"},
+                {"6", "Recently Viewed"},
+                {"7", "More Services"}
+        };
+    }
+
+    @Feature("Profile menu")
+    @Test(dataProvider = "userDropdownItems")
+    public void whenUserDropDownMenuIsDisplayedElementIsDisplayedAndCorrect(String itemNumber, String itemText) {
+        homePage.header.profileMenu.hoverOverProfileMenuIcon();
+        Assert.assertTrue(homePage.header.profileMenu.userDropdownIsDisplayed());
+
+        Assert.assertTrue(homePage.header.profileMenu.userDropdownItemIsDisplayed(itemNumber));
+        Assert.assertTrue(homePage.header.profileMenu.userDropdownItemTextIsCorrect(itemNumber, itemText));
+    }
+
+    @Feature("Profile menu")
+    @Test
+    public void whenClickSignInRegisterPageIsOpened() {
+        LoginPage loginPage = new LoginPage();
+        homePage.header.profileMenu.hoverOverProfileMenuIcon();
+        homePage.header.profileMenu.clickUserDropdownItem("1");
+
+        Assert.assertTrue(loginPage.titleIsDisplayed());
     }
 
 }

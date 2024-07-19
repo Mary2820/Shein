@@ -1,5 +1,6 @@
 package pages;
 
+import enums.FindType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,8 +18,11 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class = 'sui-dialog__body']//span[contains(@class,'sui-icon-common__wrap')]")
     public WebElement closePopUpButton;
 
-    @FindBy(xpath = "//span[@class = 'sui-popup-parent__hidden']")
+    @FindBy(xpath = "//*[@class = 'btn-new']")
     public WebElement closePopUpButton2;
+
+    @FindBy(xpath = "//div[@class = 'quickg-outside']")
+    public WebElement quickViewAd;
 
     @FindBy(xpath = "//div[@class = 'one-third-wrapper']")
     public WebElement promoBar;
@@ -54,6 +58,16 @@ public class HomePage extends BasePage {
         }
     }
 
+    public void closeQuickViewAd() {
+        try {
+            DriverService.waitElement(quickViewAd);
+            if (quickViewAd.isDisplayed()) {
+                quickViewAd.click();
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
     public void openSite(String url) {
         DriverService.openSite(url);
     }
@@ -66,11 +80,14 @@ public class HomePage extends BasePage {
     public class Header {
         public Logo logo;
         public Search search;
+        public ProfileMenu profileMenu;
 
         public Header() {
             DriverService.initPageElements(this);
             this.logo = new Logo();
             this.search = new Search();
+            this.profileMenu = new ProfileMenu();
+
 
         }
 
@@ -182,6 +199,56 @@ public class HomePage extends BasePage {
                 }
                 return true;
             }
+        }
+
+        public class ProfileMenu {
+            @FindBy(xpath = "//div[@class = 'header-right-dropdown-ctn j-header-right-dropdown-ctn new']")
+            public WebElement profileMenuIcon;
+
+            @FindBy(xpath = "//div[@class = 'user-dropdown']")
+            public WebElement userDropdown;
+
+            public ProfileMenu() {
+                DriverService.initPageElements(this);
+            }
+
+            public WebElement findMenuElement(String index) {
+                String xpathElement = "//div[@class = 'user-dropdown']//a[" + index + "]/em";
+                return DriverService.findElementBy(FindType.xpath, xpathElement);
+            }
+
+            public boolean profileMenuIsDisplayed() {
+                return profileMenuIcon.isDisplayed();
+            }
+
+            public void hoverOverProfileMenuIcon() {
+                DriverService.hoverOverElement(profileMenuIcon);
+            }
+
+            public void clickProfileMenuIcon() {
+                DriverService.waitElement(profileMenuIcon);
+                profileMenuIcon.click();
+            }
+
+            public boolean userDropdownIsDisplayed() {
+                return userDropdown.isDisplayed();
+            }
+
+            public boolean userDropdownItemIsDisplayed(String index) {
+                WebElement element = findMenuElement(index);
+                return element.isDisplayed();
+            }
+
+            public boolean userDropdownItemTextIsCorrect(String index, String text) {
+                WebElement element = findMenuElement(index);
+                return element.getText().equals(text);
+            }
+
+            public void clickUserDropdownItem(String index) {
+                WebElement element = findMenuElement(index);
+                element.click();
+            }
+
         }
     }
 }
