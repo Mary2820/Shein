@@ -15,7 +15,10 @@ public class BaseTest {
 
     @BeforeMethod
     public void startDriver () {
-
         DriverInitializer.getDriver();
+    }
+
+    public void openSite(String url) {
+        DriverInitializer.getDriver().get(url);
     }
 }

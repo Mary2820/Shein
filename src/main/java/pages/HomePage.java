@@ -68,10 +68,6 @@ public class HomePage extends BasePage {
         }
     }
 
-    public void openSite(String url) {
-        DriverService.openSite(url);
-    }
-
     public boolean homePageIsOpened() {
         DriverService.waitElement(promoBar);
         return promoBar.isDisplayed();
